@@ -9,10 +9,10 @@
 				{action name="SearchCeleb"}
 			</div>
 			<div class="row">
-				<div class="span4">
+				<div class="span3">
 					{action name="Profession"}
 				</div>
-				<div class="span8">
+				<div class="span9" id="contentDiv">
 					{action name="CelebContent"}
 				</div>
 			</div>
