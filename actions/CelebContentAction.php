@@ -10,7 +10,7 @@ class CelebContentAction extends Action {
 
 		$request -> type = !empty($request -> type) ? $request -> type : "all";
 		$d = array();
-		
+		$count = 0;
 		if ($request -> type == "all") {
 			$data = MongoUtility::getMongoDataByCollection("people_person","20");
 		}
@@ -35,12 +35,13 @@ class CelebContentAction extends Action {
 		}
 		foreach ($data as $key => $values) {
 				$id = $values["_id"];
-				$d[$key] = array_merge($data[$key], MongoUtility::getCommonInfo($id, "/common/topic"));
-				/*
-				if ($count == 16) {
+				$temp = MongoUtility::getCommonInfo($id);
+				$d[$key] = array_merge($data[$key], $temp);
+				
+				if ($count == 20) {
 									break;
 								}
-								$count++;*/
+								$count++;
 				
 				//Logger::info(">>>>>>>>>>>>>>>>>>>>>>>>>>DATA", $d[$key]);
 			}

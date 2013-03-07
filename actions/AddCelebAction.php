@@ -1,38 +1,37 @@
 <?php
-class MyCelebHomeAction extends BaseAction
+class AddCelebAction extends BaseAction
 {
   public function init() {
     parent::init();
     $this->addScript("jquery8.js");
-    $this -> template = "MyCelebHome.tpl";
+    $this -> template = "AddCeleb.tpl";
     $this->addScript("bootstrap.js");
-	$this->addPostAction("Profession");
-    $this->addPostAction("SearchCeleb");
-	$this->addPostAction("CelebContent");
 	$this->addScript("celeb.js");
     
   }
   public function execute($request, $response)
-  { //for populating people table...............
+  { 
     $query = array(array(
     				//"type"=>"/celebrities/celebrity",
     				 "/type/object/type"=>array(),
                      "*"=>NULL,
-                     //"id"=>NULL,
+                     "id"=>$request->id,
                      "type"=>"/people/person",
-                     "limit"=>200
                      ));
-	//$res = FreebaseUtility::getFullResult($query, true);
-	//MyCelebHomeAction::insertCelebrities($res);
+	$res = FreebaseUtility::getQueryResults($query, true);
 	//Logger::info(">>>>>>>>>>>>>>>>>>>>>>>>>>>",$res);
+	$res = AddCelebAction::insertCelebrities($res);
+	
+	$response->info = $res;
   }
   
-  Public function insertCelebrities($res)
+  Public function insertCelebrities($res1)
   {
-  	
+  	$res = $res1->result[0];
+	$res = array($res);
 	foreach ($res as $key => $value) {
-		$r["_id" ] = $value->id;
 		foreach ($value as $k => $v) {
+			Logger::info(">>>>>>>>>>>>>>>>>>>>>>k",$k);
 			if($k == "/type/object/type")
 			{
 			$r["types"] = $v;
@@ -45,9 +44,12 @@ class MyCelebHomeAction extends BaseAction
 				$r[$k] = $v;
 			}
 		}
+	}
+	$r["_id"] = $r["id"];
 		Logger::info(">>>>>>>>>>>>>>>>>>>>>>R",$r);
 		MongoUtility::mongoDBWrite($r,"people_person");
-		}
+		return $r;
+		
   }
 }
 ?>

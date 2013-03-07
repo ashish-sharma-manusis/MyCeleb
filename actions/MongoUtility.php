@@ -17,6 +17,18 @@ class MongoUtility
                }
     return $data;
 	}
+	public function getMongoIdByName($name)
+	{
+		$m = new MongoClient();
+    	$db = $m->db;
+    	$collection = $db->people_person;
+		$myarray = array("name" => $name);
+    	$ans = $collection->find($myarray);
+    	$data=array();
+       foreach ($ans as $key => $value) {
+           return $key;
+       }
+	}
 	public function getMongoDataByProfession($profession)
 	{
 		$m = new MongoClient();
@@ -93,17 +105,16 @@ class MongoUtility
 		//Logger::info(">>>>>>>>>>>>>>>>>>>>>>>>>>MongoName", $str);
 		return $str;
 	}
-	public function getCommonInfo($id,$type)
+	public function getCommonInfo($id)
 	{
-		$collection = MongoUtility::getMongoName($type);
-		$data = MongoUtility::getMongoDataByID($id,$collection);
+		$data = MongoUtility::getMongoDataByID($id,"common_topic");
 		if($data == NULL)
 		{
 			$query = array(array(
-								"type"=>$type,
+								"type"=>"/common/topic",
 								"id"=>$id,
-								"image"=>array(array("id"=>NULL)),
-								"article"=>array(array("id"=>NULL)),
+								"image"=>array(array("id"=>NULL, "optional"=>true)),
+								"article"=>array(array("id"=>NULL,  "optional"=>true)),
 								"description"=>array(),
 								"alias"=>array(),
 								"official_website"=>array()
@@ -131,9 +142,9 @@ class MongoUtility
 				}
 			}
 			$r["image"] = $img;
-			$r["_id"] = $res->id;
+			$r["_id"] = $id;
 			$r["article"] = $art;
-			MongoUtility::mongoDBWrite($r,$collection);
+			MongoUtility::mongoDBWrite($r,"common_topic");
 			return $r;
 		}
 		else {

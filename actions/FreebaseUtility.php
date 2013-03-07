@@ -21,7 +21,7 @@ class FreebaseUtility
 		$response = $response->result;
 		$count = 0;		
 		while($cursor) {
-			if($count == 10)
+			if($count == 30)
 			{
 				break;
 			}

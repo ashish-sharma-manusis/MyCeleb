@@ -26,8 +26,8 @@ class CelebDetailAction extends BaseAction
   	$data=array();
 	$temp = MongoUtility::getMongoDataByID($id,"people_person");
 	$data["Basic"] = $temp[0];
-	$temp = MongoUtility::getMongoDataByID($id,"common_topic");
-	$data["Common"] = $temp[0];
+	$temp = MongoUtility::getCommonInfo($id);
+	$data["Common"] = $temp;
   	foreach ($types as $key => $value) {  		
 		  if($value == "/film/actor")
 		  {
@@ -40,6 +40,26 @@ class CelebDetailAction extends BaseAction
 		  if($value == "/award/award_winner")
 		  {
 		  	$data["Award"]= PopulateType::getAward_winner($id);
+		  }
+		  if($value == "/olympics/olympic_athlete")
+		  {
+		  	$data["Olympics"]= PopulateType::getOlympicsAwards($id);
+		  }
+		  if($value == "/celebrities/celebrity")
+		  {
+		  	$data["Celebrities"]= PopulateType::getCelebritiesDetails($id);
+		  }
+		  if($value == "/government/politician")
+		  {
+		  	$data["Politician"]= PopulateType::getPoliticianDetail($id);
+		  }
+		  if($value == "/book/author")
+		  {
+		  	$data["Book"]= PopulateType::getBookAuthor($id);
+		  }
+		  if($value == "/cricket/cricket_player")
+		  {
+		  	$data["Cricket"]= PopulateType::getCricket($id);
 		  }
 	  }
 	Logger::info(">>>>>>>>>>>>>>>>>>>>>>>>DATA",$data);
